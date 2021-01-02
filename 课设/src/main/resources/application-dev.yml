@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  #去除url中的jsessionid
+  servlet:
+    session:
+      tracking-modes: cookie
+      cookie:
+        http-only: true
+  max-http-header-size: 10000000
+  tomcat:
+    max-http-form-post-size: 50000000
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    mode: HTML
+    cache: false
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+  datasource:
+    name:
+    url: jdbc:mysql://localhost:3306/chat?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: '*19980424*'
+
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  configuration:
+    call-setters-on-nulls: false
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+
+chat-file:
+  #upload-path: https://chairc.cn/file/
+  upload-path: C:\Users\lenovo\Desktopfiles\
+

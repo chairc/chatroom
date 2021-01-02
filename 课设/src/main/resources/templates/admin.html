@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="nivo-lightbox-notouch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>后台管理</title>
+    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/static/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+    <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
+</head>
+<body id="target">
+<header>
+    <nav class="navbar navbar-expand-lg fixed-top scrolling-navbar indigo top-nav-collapse top-nav-shadow" style="overflow: auto;">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar"
+                        aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                    <span class="icon-menu"></span>
+                    <span class="icon-menu"></span>
+                    <span class="icon-menu"></span>
+                </button>
+                <a href="https://www.chairc.cn" class="navbar-brand"><img
+                        src="./Home_files/logo.png" alt=""></a>
+            </div>
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="onepage-nev navbar-nav mr-auto w-100 justify-content-end clearfix">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/chatroom">聊天室</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">用户登出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul class="onepage-nev mobile-menu">
+            <li class="">
+                <a href="javascript:void(0);" onclick="showHome()">个人主页</a>
+            </li>
+            <li class="">
+                <a href="javascript:void(0);" onclick="selectUserList(1)">用户信息查看</a>
+            </li>
+            <li class="">
+                <a href="javascript:void(0);" onclick="showSelectUser()">查询数据</a>
+            </li>
+            <li class="">
+                <a href="javascript:void(0);">设置</a>
+            </li>
+            <li class="">
+                <a href="/logout">用户登出</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<div style="width: 100%;display: flex;">
+    <div class="admin-menu">
+        <ul class="list-group" style="padding-top: 70px;width: 100%;height: 60px;">
+            <li class="list-group-item list-group-item-action">
+                <a href="javascript:void(0);" onclick="showHome()">个人主页</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a href="javascript:void(0);" onclick="selectUserList(1)">用户信息查看</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a href="javascript:void(0);" onclick="showSelectUser()">查询数据</a>
+            </li>
+            <li class="list-group-item list-group-item-action">
+                <a href="javascript:void(0);">设置</a>
+            </li>
+        </ul>
+    </div>
+    <div style="width:100%;height:100vh;overflow: auto;">
+        <div style="width: 100%;padding: 100px 30px;">
+            <div id="home" class="education wow fadeInRight animated" data-wow-delay="0.3s"
+                 style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+                <div style="width: 100%">
+                    <div style="width: 100%">
+                        <div class="education wow fadeInRight animated" data-wow-delay="0.3s"
+                             style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+                            <ul class="timeline">
+                                <li>
+                                    <i class="icon-graduation"></i>
+                                    <h2 class="timelin-title" th:text="'欢迎管理员' + ${username1}"></h2>
+                                </li>
+                            </ul>
+                            <div class="content-text">
+                                <div class="login-form">
+                                    <input type="text" id="sid" name="sid" placeholder="学号"
+                                           required="required" onkeyup="value=value.replace(/[\W]/g,'')"/>
+                                    <input type="text" id="username" name="username" placeholder="姓名"
+                                           required="required"/>
+                                    <input type="text" id="sex" name="sex" placeholder="性别"
+                                           required="required"/>
+                                    <button onclick="submitUser()">注册</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="showData">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="more-info-dialog" class="more-info-dialog">
+    <div class="more-info-dialog-warp">
+        <div class="education wow fadeInRight animated" data-wow-delay="0.3s"
+             style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+            <div style="width: 100%;height: 50px;line-height: 50px;text-align: right;">
+                <button class="btn btn-transparent" onclick="closeMoreInfoDialog()" style="height: 50px;width: 50px">╳</button>
+            </div>
+            <div id="moreInfoData" style="margin: auto;width: 80%;">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div id="more-info-dialog-background" class="more-info-dialog-background">
+</div>
+<a href="" class="back-to-top" style="display: block;">
+    <i>
+        <p>UP</p>
+    </i>
+</a>
+<div class="message-box-warp">
+    <div id="message-box" class="message-box">
+        <p id="message-box-text"></p>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/js/jquery-min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/admin.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/wow.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.nav.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/nivo-lightbox.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.slicknav.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.mixitup.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.counterup.min.js}"></script>
+</body>
+</html>

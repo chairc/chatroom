@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="nivo-lightbox-notouch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>个人空间</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" th:href="@{/static/images/ico/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/static/css/nivo-lightbox.css}">
+    <link rel="stylesheet" th:href="@{/static/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+    <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
+    <style>
+        .border td {
+            border: #000000 solid 1px
+        }
+    </style>
+</head>
+<body>
+<header th:replace="header.html"></header>
+<div class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div style="padding-top: 40px;">
+                <ul class="nav nav-tabs">
+                    <li class="user-li-style">
+                        <a href="#user_home" style="color: #000000">用户主页</a>
+                    </li>
+                    <li class="user-li-style">
+                        <a href="/chatroom" style="color: #000000">聊天室</a>
+                    </li>
+                    <li class="user-li-style">
+                        <a href="/logout" style="color: #000000">退出登录</a>
+                    </li>
+                </ul>
+                <div class="tab-content" style="width: 100%">
+                    <div class="tab-pane active" id="user_home">
+                        <div class="education wow fadeInRight animated" data-wow-delay="0.3s"
+                             style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+                            </div>
+                            <div class="user-menu-panel">
+                                <div class="user-menu-panel-title">
+                                    <a style="color:#666;">
+                                        <h5><b th:text="'早上好！亲爱的' + ${username}"></b></h5>
+                                    </a>
+                                </div>
+                                <div class="user-menu-panel-other">
+                                    <div class="user-menu-panel-other-box">
+                                        <div class="user-menu-panel-target">
+                                            <p>上传文件</p>
+                                            <input type="file" id="file" name="file">
+                                        </div>
+                                        <div class="user-menu-panel-target">
+                                            <button onclick="fileUpload()">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="user-menu-panel-introduce">
+                                    <p>这是一条对于你的简介。。。。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="footer.html"></footer>
+<a href="" class="back-to-top" style="display: block;">
+    <i>
+        <p>UP</p>
+    </i>
+</a>
+<div class="message-box-warp">
+    <div id="message-box" class="message-box">
+        <p id="message-box-text"></p>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/static/js/jquery-min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/wow.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.nav.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/nivo-lightbox.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.slicknav.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.mixitup.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.counterup.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="nivo-lightbox-notouch" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>聊天室</title>
+    <link rel="stylesheet" th:href="@{/static/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/css/slicknav.css}">
+    <link rel="stylesheet" th:href="@{/static/css/nivo-lightbox.css}">
+    <link rel="stylesheet" th:href="@{/static/css/animate.css}">
+    <link rel="stylesheet" th:href="@{/static/css/main.css}">
+    <link rel="stylesheet" th:href="@{/static/css/responsive.css}">
+</head>
+<body>
+<header th:replace="header.html"></header>
+<div id="chat" class="section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="chat-container wow fadeInDown animated" data-wow-delay="0.3s"
+                 style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s; ">
+                <div id="chat-data" style="width:100%; height:100%;overflow: auto;">
+
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;">
+            <div style="width: 80%;float: left;">
+                <div class="message-container" id="chat-editor">
+                    <input type="text" id="chat-text" style="width: 100%;height: 42px;">
+                </div>
+            </div>
+            <div style="width: 20%;float: right;">
+                <div style="text-align: right">
+                    <button class="btn btn-info" onclick="sendChat()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="message-box-warp">
+    <div id="message-box" class="message-box">
+        <p id="message-box-text"></p>
+    </div>
+</div>
+<footer th:replace="footer.html"></footer>
+</body>
+<script type="text/javascript" th:src="@{/static/js/jquery-min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.mixitup.js}"></script>
+<script type="text/javascript" th:src="@{/static/js/jquery.counterup.min.js}"></script>
+<script type="text/javascript">
+    var socket;
+    if (typeof (WebSocket) == "undefined") {
+        console.log("遗憾：您的浏览器不支持WebSocket");
+    } else {
+        console.log("恭喜：您的浏览器支持WebSocket");
+        //实现化WebSocket对象
+        //指定要连接的服务器地址与端口建立连接
+        //注意ws、wss使用不同的端口。我使用自签名的证书测试，
+        //无法使用wss，浏览器打开WebSocket时报错
+        //ws对应http、wss对应https。
+        url = "ws://" + window.location.host + "/chatOnline/websocket";
+        console.log(url);
+        socket = new WebSocket(url);
+        //连接打开事件
+        socket.onopen = function () {
+            console.log("Socket 已打开");
+            socket.send("消息发送测试(来自客户端)");
+        };
+        //收到消息事件
+        socket.onmessage = function (data) {
+            console.log(data.data);
+            var map = eval("(" + data.data + ")");
+            for (var key in map) {
+                console.log(map[key]);
+            }
+            $('#chat-data').append("<p>" + map["chat_username"] + "说：" + map["chat_text"] + "</p>");
+            // data1 = (new Function("", "return " + data.data))();
+            // console.log(JSON.stringify(data1["chat_text"]));
+            // $('#chat-data').append("<p>" + JSON.stringify(data1["chat_text"]) + "</p>");
+            //原生DOM
+            var divscll = document.getElementById('chat-data');
+            divscll.scrollTop = divscll.scrollHeight;
+        };
+        //连接关闭事件
+        socket.onclose = function () {
+            console.log("Socket已关闭");
+        };
+        //发生了错误事件
+        socket.onerror = function () {
+            alert("Socket发生了错误");
+        };
+        //窗口关闭时，关闭连接
+        window.unload = function () {
+            socket.close();
+        };
+    }
+
+    $(document).keypress(function(e) {
+        // 回车键事件
+        if(e.which === 13) {
+            sendChat();
+        }
+    });
+
+    function sendChat() {
+        var chatText = $("#chat-text").val();
+        //alert(chatText);
+        $.ajax({
+            url: "/api/websocket/sendAll",
+            dataType: "JSON",
+            data: {
+                "chatText": chatText
+            },
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.code === "1") {
+                    //提交成功
+                    $("#message-box-text").html(data.msg)
+                    $("#message-box").css("color", "#d7f7ff");
+                    $("#message-box").css("background", "#1a95ff");
+                    $("#chat-text").val("");
+                    $("#chat-text").focus();
+                } else if (data.code === "0") {
+                    $("#message-box-text").html(data.msg)
+                    $("#message-box").css("color", "#a94442");
+                    $("#message-box").css("background", "#f2dede");
+                }
+                setTimeout(function () {
+                    $('#message-box').slideUp(300);
+                }, 1000);
+                if ($("#message-box").is(":hidden")) {
+                    $('#message-box').slideDown(300);
+                } else {
+                    $('#message-box').slideUp(300);
+                }
+            }
+        })
+    }
+</script>
+</html>

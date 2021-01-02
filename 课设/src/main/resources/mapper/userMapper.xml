@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chairc.chat.mapper.UserMapper">
+    <!--关于ResultMap 如果实体类与数据库的行相同则不用写，反之则需要写ResultMap-->
+    <sql id="table">chat_user</sql>
+    <sql id="role_table">role</sql>
+    <sql id="permission_table">permission</sql>
+
+    <select id="getUserBySid" resultType="cn.chairc.chat.model.User">
+        SELECT
+        *
+        FROM
+        <include refid="table"/>
+        WHERE
+        sid = #{sid}
+    </select>
+
+    <insert id="userAdd" parameterType="cn.chairc.chat.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+        <include refid="table"/>
+        (uid,sid,username,password,sex,ip,browser,weight)
+        VALUES
+        (#{uid},#{sid},#{username},#{password},#{sex},
+        #{ip},#{browser},#{weight})
+    </insert>
+
+    <update id="userUpdate" parameterType="cn.chairc.chat.model.User">
+        UPDATE
+        <include refid="table"/>
+        <set>
+            <if test="sid!=null">sid = #{sid},</if>
+            <if test="username!=null">username = #{username},</if>
+            <if test="password!=null">password = #{password},</if>
+            <if test="sex!=null">sex = #{sex},</if>
+            <if test="ip!=null">ip = #{ip},</if>
+            <if test="browser!=null">browser = #{browser},</if>
+            <if test="weight!=null">weight = #{weight}</if>
+        </set>
+        WHERE
+        uid = #{uid}
+    </update>
+
+    <update id="userLoginUpdate">
+        UPDATE
+        <include refid="table"/>
+        SET
+        ip = #{ip},browser = #{browser}
+        WHERE
+        uid = #{uid}
+    </update>
+
+    <delete id="userDelete" parameterType="cn.chairc.chat.model.User">
+        DELETE FROM
+        <include refid="table"/>
+        WHERE
+        uid = #{uid}
+    </delete>
+
+    <select id="getUserListByAdmin" resultType="cn.chairc.chat.model.User">
+        SELECT
+        *
+        FROM
+        <include refid="table"/>
+    </select>
+
+    <select id="getUserByAdmin" resultType="cn.chairc.chat.model.User">
+        SELECT
+        *
+        FROM
+        <include refid="table"/>
+        WHERE
+        sid = #{sid}
+    </select>
+</mapper>
